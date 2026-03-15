@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AppleAI — Crop Intelligence System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🍎</span>
+        <div>
+          <div class="logo-title">AppleAI</div>
+          <div class="logo-sub">Crop Intelligence System</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#disease" class="nav-link active" data-tab="disease">Disease Detection</a>
+        <a href="#severity" class="nav-link" data-tab="severity">Severity Estimation</a>
+        <a href="#counting" class="nav-link" data-tab="counting">Fruit Counting</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="badge">Vision-Based AI · Apple-Exclusive</div>
+      <h1 class="hero-title">Apple Crop<br /><em>Intelligence</em></h1>
+      <p class="hero-desc">AI-powered disease detection, severity analysis &amp; fruit counting designed exclusively for apple orchards. Upload a photo, get instant precision diagnostics.</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">5</span><span class="stat-label">Disease Classes</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-num">3</span><span class="stat-label">AI Models</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-num">95%</span><span class="stat-label">Accuracy</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main App -->
+  <main class="main">
+
+    <!-- Tab Panels -->
+    <div class="tabs-container">
+
+      <!-- TAB: Disease Detection -->
+      <section id="disease" class="tab-panel active">
+        <div class="panel-header">
+          <div class="panel-icon">🍃</div>
+          <div>
+            <h2>Apple Leaf Disease Detection</h2>
+            <p>Upload a photo of an apple leaf. The AI classifies it into one of 5 known disease categories or marks it healthy.</p>
+          </div>
+        </div>
+
+        <div class="upload-zone" id="disease-upload" ondragover="event.preventDefault()" ondrop="handleDrop(event,'disease')">
+          <input type="file" id="disease-file" accept="image/*" onchange="handleFileChange(event,'disease')" hidden />
+          <div class="upload-placeholder" id="disease-placeholder">
+            <div class="upload-icon">📷</div>
+            <div class="upload-text">Drop an apple leaf image here<br /><span>or click to browse</span></div>
+            <button class="btn-upload" onclick="document.getElementById('disease-file').click()">Choose Image</button>
+          </div>
+          <img id="disease-preview" class="preview-img" style="display:none" alt="Preview" />
+        </div>
+
+        <button class="btn-analyze" id="disease-btn" onclick="analyzeDisease()" disabled>
+          <span class="btn-text">Analyze Leaf Disease</span>
+          <span class="btn-spinner" style="display:none">⏳ Analyzing…</span>
+        </button>
+
+        <div class="result-card" id="disease-result" style="display:none">
+          <div class="result-header">
+            <span class="result-badge" id="disease-badge"></span>
+            <span class="confidence-tag" id="disease-conf"></span>
+          </div>
+          <div class="result-body">
+            <div class="result-disease" id="disease-name"></div>
+            <div class="result-desc" id="disease-desc"></div>
+          </div>
+          <div class="disease-classes">
+            <div class="classes-title">All Apple Disease Classes</div>
+            <div class="classes-grid" id="disease-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: Severity Estimation -->
+      <section id="severity" class="tab-panel">
+        <div class="panel-header">
+          <div class="panel-icon">🔬</div>
+          <div>
+            <h2>Disease Severity Estimation</h2>
+            <p>Pixel-based segmentation estimates how much of the leaf area is diseased — helping prioritize treatment urgency.</p>
+          </div>
+        </div>
+
+        <div class="upload-zone" id="severity-upload" ondragover="event.preventDefault()" ondrop="handleDrop(event,'severity')">
+          <input type="file" id="severity-file" accept="image/*" onchange="handleFileChange(event,'severity')" hidden />
+          <div class="upload-placeholder" id="severity-placeholder">
+            <div class="upload-icon">🔍</div>
+            <div class="upload-text">Upload an apple leaf for severity check<br /><span>or click to browse</span></div>
+            <button class="btn-upload" onclick="document.getElementById('severity-file').click()">Choose Image</button>
+          </div>
+          <img id="severity-preview" class="preview-img" style="display:none" alt="Preview" />
+        </div>
+
+        <button class="btn-analyze" id="severity-btn" onclick="analyzeSeverity()" disabled>
+          <span class="btn-text">Estimate Severity</span>
+          <span class="btn-spinner" style="display:none">⏳ Processing…</span>
+        </button>
+
+        <div class="result-card" id="severity-result" style="display:none">
+          <div class="severity-visual">
+            <canvas id="severity-canvas" width="400" height="250"></canvas>
+            <div class="severity-legend">
+              <div class="legend-item"><span class="dot healthy"></span>Healthy Tissue</div>
+              <div class="legend-item"><span class="dot diseased"></span>Diseased Area</div>
+            </div>
+          </div>
+          <div class="severity-meter">
+            <div class="meter-label">Severity Level</div>
+            <div class="meter-track">
+              <div class="meter-fill" id="severity-fill"></div>
+            </div>
+            <div class="meter-value" id="severity-pct"></div>
+          </div>
+          <div class="severity-verdict" id="severity-verdict"></div>
+          <div class="severity-stats" id="severity-stats"></div>
+        </div>
+      </section>
+
+      <!-- TAB: Fruit Counting -->
+      <section id="counting" class="tab-panel">
+        <div class="panel-header">
+          <div class="panel-icon">🍎</div>
+          <div>
+            <h2>Apple Fruit Detection &amp; Counting</h2>
+            <p>YOLO-based detection draws bounding boxes around each apple and returns a precise count for yield estimation.</p>
+          </div>
+        </div>
+
+        <div class="upload-zone" id="counting-upload" ondragover="event.preventDefault()" ondrop="handleDrop(event,'counting')">
+          <input type="file" id="counting-file" accept="image/*" onchange="handleFileChange(event,'counting')" hidden />
+          <div class="upload-placeholder" id="counting-placeholder">
+            <div class="upload-icon">🌳</div>
+            <div class="upload-text">Upload an apple tree or fruit image<br /><span>or click to browse</span></div>
+            <button class="btn-upload" onclick="document.getElementById('counting-file').click()">Choose Image</button>
+          </div>
+          <img id="counting-preview" class="preview-img" style="display:none" alt="Preview" />
+        </div>
+
+        <button class="btn-analyze" id="counting-btn" onclick="analyzeCounting()" disabled>
+          <span class="btn-text">Detect &amp; Count Apples</span>
+          <span class="btn-spinner" style="display:none">⏳ Detecting…</span>
+        </button>
+
+        <div class="result-card" id="counting-result" style="display:none">
+          <div class="count-display">
+            <canvas id="counting-canvas"></canvas>
+          </div>
+          <div class="count-summary">
+            <div class="count-big" id="count-number"></div>
+            <div class="count-label">Apples Detected</div>
+            <div class="count-breakdown" id="count-breakdown"></div>
+          </div>
+          <div class="boxes-info" id="boxes-info"></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Info Section -->
+    <section class="info-section">
+      <h3>How It Works</h3>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-num">01</div>
+          <div class="info-title">Leaf Classification</div>
+          <div class="info-text">MobileNetV2 backbone fine-tuned on the Apple subset of PlantVillage dataset. Identifies 5 classes: Scab, Black Rot, Cedar Rust, Alternaria, Healthy.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-num">02</div>
+          <div class="info-title">Severity Segmentation</div>
+          <div class="info-text">U-Net segmentation model separates diseased pixels from healthy tissue. Severity % = diseased pixels ÷ total leaf pixels × 100.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-num">03</div>
+          <div class="info-title">YOLO Fruit Counting</div>
+          <div class="info-text">YOLOv8 trained on apple orchard images. Detects partially visible and overlapping fruits with bounding-box confidence scoring.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div>AppleAI — Vision-Based Crop Intelligence System &copy; 2025 · Group 10</div>
+    <div class="footer-note">For educational and prototype purposes. Results are AI-simulated.</div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
