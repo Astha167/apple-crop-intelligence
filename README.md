@@ -2,7 +2,7 @@
 
 > AI-powered disease detection, severity estimation & fruit counting — exclusively for Apple crops.
 
-**Live Demo**: [https://YOUR-USERNAME.github.io/apple-crop-intelligence](https://YOUR-USERNAME.github.io/apple-crop-intelligence)
+**Live Demo**: [https://Astha167.github.io/apple-crop-intelligence](https://Astha167.github.io/apple-crop-intelligence)
 
 ---
 
