@@ -100,7 +100,7 @@ async function analyzeDisease() {
   await simulateDelay(1600 + Math.random() * 800);
 
   const result = pickWeightedDisease();
-  const confidence = (82 + Math.random() * 14).toFixed(1);
+  const confidence = (61 + Math.random() * 18).toFixed(1);
 
   // Show result
   const card = document.getElementById('disease-result');
@@ -332,7 +332,7 @@ function generateYOLOBoxes(W, H) {
       x: Math.max(0, x), y: Math.max(0, y),
       w: Math.min(bw, W - Math.max(0, x)),
       h: Math.min(bh, H - Math.max(0, y)),
-      conf: 0.72 + Math.random() * 0.27,
+      conf: 0.51 + Math.random() * 0.28,
       visibility: isPartial ? 'partial' : 'full',
     });
   }
